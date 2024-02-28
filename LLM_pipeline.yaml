@@ -1,0 +1,51 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: bert-fine-tuning-pipeline-
+  annotations: {pipelines.kubeflow.org/kfp_sdk_version: 1.8.22, pipelines.kubeflow.org/pipeline_compilation_time: '2024-02-28T12:59:03.140245',
+    pipelines.kubeflow.org/pipeline_spec: '{"description": "A pipeline that fine-tunes
+      bert model with sprecific data.", "name": "bert Fine-Tuning Pipeline"}'}
+  labels: {pipelines.kubeflow.org/kfp_sdk_version: 1.8.22}
+spec:
+  entrypoint: bert-fine-tuning-pipeline
+  templates:
+  - name: bert-fine-tuning-pipeline
+    dag:
+      tasks:
+      - name: fine-tuned-model-evaluation
+        template: fine-tuned-model-evaluation
+        dependencies: [output-after-fine-tuning]
+      - name: output-after-fine-tuning
+        template: output-after-fine-tuning
+        dependencies: [output-before-fine-tunning]
+      - {name: output-before-fine-tunning, template: output-before-fine-tunning}
+  - name: fine-tuned-model-evaluation
+    container:
+      command: [python3, /app/evaluate_fine_tuned_model/evaluate_fine_tuned_model.py]
+      image: maamounm/llm_pipeline:latest
+    metadata:
+      labels:
+        pipelines.kubeflow.org/kfp_sdk_version: 1.8.22
+        pipelines.kubeflow.org/pipeline-sdk-type: kfp
+        pipelines.kubeflow.org/enable_caching: "true"
+  - name: output-after-fine-tuning
+    container:
+      command: [python3, /app/Fine_tuned_model_output/fine_tuned_model_output.py]
+      image: maamounm/llm_pipeline:latest
+    metadata:
+      labels:
+        pipelines.kubeflow.org/kfp_sdk_version: 1.8.22
+        pipelines.kubeflow.org/pipeline-sdk-type: kfp
+        pipelines.kubeflow.org/enable_caching: "true"
+  - name: output-before-fine-tunning
+    container:
+      command: [python3, /app/Model_output/model_output.py]
+      image: maamounm/llm_pipeline:latest
+    metadata:
+      labels:
+        pipelines.kubeflow.org/kfp_sdk_version: 1.8.22
+        pipelines.kubeflow.org/pipeline-sdk-type: kfp
+        pipelines.kubeflow.org/enable_caching: "true"
+  arguments:
+    parameters: []
+  serviceAccountName: pipeline-runner
