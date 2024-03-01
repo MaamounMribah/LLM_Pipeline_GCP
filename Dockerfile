@@ -12,5 +12,7 @@ COPY Preprocess_data /app/Preprocess_data
 # Install any needed packages specified in requirements.txt
 RUN pip install torch transformers pandas tqdm scikit-learn datasets tensorflow numpy
 
+#RUN pip install torch transformers
 
+#CMD ['python3','/app/Model_output/model_output.py']
 

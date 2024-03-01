@@ -4,7 +4,7 @@ import torch
 from transformers import BertForQuestionAnswering
 from transformers import BertTokenizer
 
-coqa = pd.read_json('QA.json')
+coqa = pd.read_json('https://res.cloudinary.com/doec3busn/raw/upload/v1709284936/QA_au3zsc.json')
 del coqa["version"]
 
 #required columns in our dataframe

@@ -66,7 +66,7 @@ def evaluate(data, model, tokenizer):
     print(f"F1 Score: {f1:.4f}")
 
 def main():
-    data_path = "CoQA_data.csv"
+    data_path = "https://res.cloudinary.com/doec3busn/raw/upload/v1709285138/CoQA_data_t0zild.csv"
     data = load_data(data_path)
     
     print(f"Number of question and answers: {len(data)}")
