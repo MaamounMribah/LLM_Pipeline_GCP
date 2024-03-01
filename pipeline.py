@@ -103,7 +103,7 @@ def llm_pipeline():
 
 
 endpoint="http://localhost:8080/"
-#kfp_client= Client(host=endpoint)
+kfp_client= Client(host=endpoint)
 
 
 
@@ -124,23 +124,23 @@ if __name__ == "__main__":
     kfp.compiler.Compiler().compile(pipeline_func=llm_pipeline, package_path='LLM_pipeline.yaml')
 
     # Define and create an experiment
-    #experiment_response = kfp_client.create_experiment(name=experiment_name, description=experiment_description)
+    experiment_response = kfp_client.create_experiment(name=experiment_name, description=experiment_description)
 
     # Upload the pipeline
-    #pipeline_response = kfp_client.upload_pipeline('LLM_pipeline.yaml', pipeline_name=pipeline_name, description=pipeline_description)
+    pipeline_response = kfp_client.upload_pipeline('LLM_pipeline.yaml', pipeline_name=pipeline_name, description=pipeline_description)
 
     # Extract the experiment ID
-    #experiment_id = experiment_response.experiment_id
+    experiment_id = experiment_response.id
 
 
     # Extract the pipeline ID
-    #pipeline_id = pipeline_response.pipeline_id
+    pipeline_id = pipeline_response.id
 
     # List versions for the uploaded pipeline and select the most recent version ID
-    #version_id=kfp_client.list_pipeline_versions(pipeline_id=pipeline_id).pipeline_versions[0].pipeline_version_id
+    #version_id=kfp_client.list_pipeline_versions(pipeline_id=pipeline_id)
 
     
     # Create a run within the defined experiment using the uploaded pipeline and its version
     run_name = f"{pipeline_name} Run "
     #run = kfp_client.create_run_from_pipeline_func(llm_pipeline,arguments={})
-    #run_response = kfp_client.run_pipeline(experiment_id=experiment_id, job_name=run_name, pipeline_id=pipeline_response.pipeline_id, version_id=version_id, params={})
+    run_response = kfp_client.run_pipeline(experiment_id=experiment_id, job_name=run_name, pipeline_id=pipeline_id, params={})
