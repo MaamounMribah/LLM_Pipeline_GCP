@@ -102,7 +102,8 @@ def llm_pipeline():
 
 
 
-endpoint="http://localhost:8080/"
+#endpoint="http://localhost:8080/"
+endpoint="https://e972-41-227-19-17.ngrok-free.app/#/pipelines"
 kfp_client= Client(host=endpoint)
 
 
