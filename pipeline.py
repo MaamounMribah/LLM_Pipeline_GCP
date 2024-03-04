@@ -20,8 +20,11 @@ def build_push_image():
     else:
         print(f"Command failed with error: {result.stderr}")
 """     
+# load balancer service 
+os.system("sudo kubectl exec buildkit-cli -- buildctl --addr tcp://192.168.88.202:1234 build --frontend=dockerfile.v0 --local context=/llm --local dockerfile=/llm --output type=image,name=docker.io/maamounm/llm_pipeline:latest,push=true")
 
-os.system("sudo kubectl exec buildkit-cli -- buildctl --addr tcp://buildkitd:1234 build   --frontend=dockerfile.v0   --local context=/llm   --local dockerfile=/llm   --output type=image,name=docker.io/maamounm/llm_pipeline:latest,push=true")
+# cluster IP service 
+# os.system("sudo kubectl exec buildkit-cli -- buildctl --addr tcp://buildkitd:1234 build   --frontend=dockerfile.v0   --local context=/llm   --local dockerfile=/llm   --output type=image,name=docker.io/maamounm/llm_pipeline:latest,push=true")
 
 def preprocess_data_op(dataset : str, split: str) :
     return dsl.ContainerOp(
