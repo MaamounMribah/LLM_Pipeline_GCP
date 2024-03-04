@@ -21,12 +21,12 @@ jobs:
         run: pip install kfp==1.8.22
         
       - name: Install kubectl
-          run: 
-            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-            mkdir -p $HOME/bin
-            mv kubectl $HOME/bin/kubectl
-            chmod +x $HOME/bin/kubectl
-            echo "$HOME/bin" >> $GITHUB_PATH
+        run: |
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          mkdir -p $HOME/bin
+          mv kubectl $HOME/bin/kubectl
+          chmod +x $HOME/bin/kubectl
+          echo "$HOME/bin" >> $GITHUB_PATH
 
       - name: Configure kubectl
           env:
