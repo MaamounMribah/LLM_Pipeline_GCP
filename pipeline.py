@@ -43,7 +43,7 @@ def preprocess_data_op(dataset : str, split: str) :
 def bert_output_before_fine_tuning_op():
     return dsl.ContainerOp(
         name="output before fine tuning",
-        image='maamounm/llm_pipeline:v2',
+        image='maamounm/llm_pipeline:latest',
         command=['python3','/app/Model_output/model_output.py'],
         #arguments=[model_path,test_data],
     )
