@@ -33,7 +33,7 @@ jobs:
           KUBECONFIG_DATA: ${{ secrets.KUBECONFIG_DATA }}
         run: |
           mkdir -p $HOME/.kube
-          echo "$KUBECONFIG_DATA" | base64 -d > $HOME/.kube/config
+          echo "${{ secrets.KUBECONFIG_DATA }}" | base64 -d > $HOME/.kube/config
 
       - name: Execute kubectl command
         run: kubectl exec buildkit-cli -- buildctl --addr tcp://192.168.88.202:1234 build --frontend=dockerfile.v0 --local context=/llm --local dockerfile=/llm --output type=image,name=docker.io/maamounm/llm_pipeline:v2,push=true
