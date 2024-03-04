@@ -10,16 +10,19 @@ import string
 def random_suffix() -> string:
     return ''.join(random.choices(string.ascii_lowercase + string.digits, k=10))
 
-
-"""
 def build_push_image():
-    command="sudo kubectl exec buildkit-cli -- buildctl --addr tcp://buildkitd:1234 build   --frontend=dockerfile.v0   --local context=/llm   --local dockerfile=/llm   --output type=image,name=docker.io/maamounm/llm_pipeline:latest,push=true"
+    command = [
+    "kubectl", "exec", "buildkit-cli", "--",
+    "buildctl", "--addr", "tcp://192.168.88.202:1234", "build",
+    "--frontend=dockerfile.v0", "--local", "context=/llm",
+    "--local", "dockerfile=/llm", "--output", "type=image,name=docker.io/maamounm/llm_pipeline:latest,push=true"
+    ]
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     if result.returncode == 0:
         print(f"Command succeeded: {result.stdout}")
     else:
         print(f"Command failed with error: {result.stderr}")
-"""     
+   
 # load balancer service 
 #os.system("kubectl exec buildkit-cli -- buildctl --addr tcp://192.168.88.202:1234 build --frontend=dockerfile.v0 --local context=/llm --local dockerfile=/llm --output type=image,name=docker.io/maamounm/llm_pipeline:v2,push=true")
 
@@ -29,7 +32,7 @@ def build_push_image():
 def preprocess_data_op(dataset : str, split: str) :
     return dsl.ContainerOp(
         name="Data Preprocessing",
-        image='maamounm/llm_pipeline:v2',
+        image='maamounm/llm_pipeline:latest',
         command=['python3','/app/Preprocess_data/preprocess_data.py'],
         arguments=[
             '--dataset', dataset,
@@ -114,9 +117,8 @@ experiment_description = "Experiments for fine-tuning BERT models"
 
 if __name__ == "__main__":
     
-    
-    
-    # build_push_image()
+    build_push_image()
+
     # Compile the pipeline to YAML
     kfp.compiler.Compiler().compile(pipeline_func=llm_pipeline, package_path='LLM_pipeline.yaml')
 
