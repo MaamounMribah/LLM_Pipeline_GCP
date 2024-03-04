@@ -28,6 +28,11 @@ jobs:
           push: true
           tags: maamounm/llm_pipeline:latest
 
+          build-args: |
+              BUILDKIT_INLINE_CACHE=1
+          cache-from: type=registry,ref=maamounm/llm_pipeline:latest
+          cache-to: type=inline
+
   kubeflow-pipeline-deployment:
     runs-on: ubuntu-latest
     needs: build-and-push-docker

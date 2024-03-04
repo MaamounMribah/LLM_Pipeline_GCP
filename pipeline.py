@@ -10,31 +10,18 @@ import string
 def random_suffix() -> string:
     return ''.join(random.choices(string.ascii_lowercase + string.digits, k=10))
 
-def run_command(command):
-    """
-    Runs a command using subprocess.run and captures the output and errors.
-    """
+
+"""
+def build_push_image():
+    command="sudo kubectl exec buildkit-cli -- buildctl --addr tcp://buildkitd:1234 build   --frontend=dockerfile.v0   --local context=/llm   --local dockerfile=/llm   --output type=image,name=docker.io/maamounm/llm_pipeline:latest,push=true"
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     if result.returncode == 0:
         print(f"Command succeeded: {result.stdout}")
     else:
         print(f"Command failed with error: {result.stderr}")
+"""     
 
-def build_images():
-    build_commands = [
-        "DOCKER_BUILDKIT=1 docker build -t maamounm/llm_pipeline:latest .",
-    ]
-    for command in build_commands:
-        run_command(command)
-
-def push_images():
-    push_commands = [
-        "docker push maamounm/llm_pipeline:latest",
-    ]
-    for command in push_commands:
-        run_command(command)
-
-
+os.system("sudo kubectl exec buildkit-cli -- buildctl --addr tcp://buildkitd:1234 build   --frontend=dockerfile.v0   --local context=/llm   --local dockerfile=/llm   --output type=image,name=docker.io/maamounm/llm_pipeline:latest,push=true")
 
 def preprocess_data_op(dataset : str, split: str) :
     return dsl.ContainerOp(
@@ -103,8 +90,9 @@ def llm_pipeline():
 
 
 #endpoint="http://localhost:8080/"
+
 # Your Ngrok host URL (API endpoint, not the UI)
-endpoint = "https://e972-41-227-19-17.ngrok-free.app"
+endpoint = "https://stable-genuinely-flea.ngrok-free.app/"
 
 # Assuming `credentials` is a bearer token for this example
 token = "Bearer " + "2c5g0Ejfb17lNG3joEIBbAK1boi_7gA7ZiSVTvdbRmsfvMmaa"
@@ -123,10 +111,9 @@ experiment_description = "Experiments for fine-tuning BERT models"
 
 if __name__ == "__main__":
     
-    #build_images()
-    #push_images()
     
-
+    
+    # build_push_image()
     # Compile the pipeline to YAML
     kfp.compiler.Compiler().compile(pipeline_func=llm_pipeline, package_path='LLM_pipeline.yaml')
 
