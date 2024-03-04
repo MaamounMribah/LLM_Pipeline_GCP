@@ -21,7 +21,7 @@ jobs:
         run: pip install kfp==1.8.22
         
       - name: Install kubectl
-          run: |
+          run: 
             curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
             mkdir -p $HOME/bin
             mv kubectl $HOME/bin/kubectl
