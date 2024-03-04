@@ -6,6 +6,7 @@ on:
       - main
 
 jobs:
+  """
   build-and-push-docker:
     runs-on: ubuntu-latest
     steps:
@@ -27,12 +28,12 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: maamounm/llm_pipeline:latest
-
+  """
           
 
   kubeflow-pipeline-deployment:
     runs-on: ubuntu-latest
-    needs: build-and-push-docker
+    #needs: build-and-push-docker
     steps:
       - uses: actions/checkout@v3
 
