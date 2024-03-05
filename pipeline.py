@@ -15,7 +15,7 @@ def build_push_image():
     "kubectl", "exec", "buildkit-cli", "--",
     "buildctl", "--addr", "tcp://192.168.88.202:1234", "build",
     "--frontend=dockerfile.v0", "--local", "context=/llm",
-    "--local", "dockerfile=/llm", "--output", "type=image,name=docker.io/maamounm/llm_pipeline:latest,push=true"
+    "--local", "dockerfile=/llm", "--output", "type=image,name=docker.io/maamounm/llm_pipeline:v2,push=true"
     ]
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     if result.returncode == 0:
@@ -32,7 +32,7 @@ def build_push_image():
 def preprocess_data_op(dataset : str, split: str) :
     return dsl.ContainerOp(
         name="Data Preprocessing",
-        image='maamounm/llm_pipeline:latest',
+        image='maamounm/llm_pipeline:v2',
         command=['python3','/app/Preprocess_data/preprocess_data.py'],
         arguments=[
             '--dataset', dataset,
