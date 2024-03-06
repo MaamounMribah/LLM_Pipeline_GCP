@@ -12,27 +12,27 @@ def random_suffix() -> string:
 
 def build_push_image():
     command = [
-    "kubectl", "exec", "buildkit-cli", "--",
-    "buildctl", "--addr", "tcp://192.168.88.202:1234", "build",
-    "--frontend=dockerfile.v0", "--local", "context=/llm",
-    "--local", "dockerfile=/llm", "--output", "type=image,name=docker.io/maamounm/llm_pipeline:v2,push=true"
+        "sudo","kubectl", "exec", "buildkit-cli", "--",
+        "buildctl", "--addr", "tcp://192.168.88.202:1234", "build",
+        "--frontend=dockerfile.v0", "--local", "context=/llm",
+        "--local", "dockerfile=/llm", "--output", "type=image,name=docker.io/maamounm/llm_pipeline:latest,push=true"
     ]
-    result = subprocess.run(command, shell=True, capture_output=True, text=True)
+    result = subprocess.run(command, capture_output=True, text=True)
     if result.returncode == 0:
         print(f"Command succeeded: {result.stdout}")
     else:
         print(f"Command failed with error: {result.stderr}")
    
 # load balancer service 
-#os.system("kubectl exec buildkit-cli -- buildctl --addr tcp://192.168.88.202:1234 build --frontend=dockerfile.v0 --local context=/llm --local dockerfile=/llm --output type=image,name=docker.io/maamounm/llm_pipeline:v2,push=true")
+os.system("sudo kubectl exec buildkit-cli -- buildctl --addr tcp://192.168.88.202:1234 build --frontend=dockerfile.v0 --local context=/llm --local dockerfile=/llm --output type=image,name=docker.io/maamounm/llm_pipeline:v2,push=true")
 
 # cluster IP service 
 # os.system("sudo kubectl exec buildkit-cli -- buildctl --addr tcp://buildkitd:1234 build   --frontend=dockerfile.v0   --local context=/llm   --local dockerfile=/llm   --output type=image,name=docker.io/maamounm/llm_pipeline:latest,push=true")
 
 def preprocess_data_op(dataset : str, split: str) :
     return dsl.ContainerOp(
-        name="Data Preprocessing",
-        image='maamounm/llm_pipeline:v2',
+        name="Data Preprocessing2",
+        image='maamounm/llm_pipeline:latest',
         command=['python3','/app/Preprocess_data/preprocess_data.py'],
         arguments=[
             '--dataset', dataset,
@@ -45,7 +45,7 @@ def preprocess_data_op(dataset : str, split: str) :
 
 def bert_output_before_fine_tuning_op():
     return dsl.ContainerOp(
-        name="output before fine tuning",
+        name="output before fine tuning2",
         image='maamounm/llm_pipeline:latest',
         command=['python3','/app/Model_output/model_output.py'],
         #arguments=[model_path,test_data],
@@ -54,7 +54,7 @@ def bert_output_before_fine_tuning_op():
 def bert_fine_tuned_model_output_op():
     
     return dsl.ContainerOp(
-        name="output after fine tuning",
+        name="output after fine tuning2",
         image='maamounm/llm_pipeline:latest',
         command=['python3','/app/Fine_tuned_model_output/fine_tuned_model_output.py'],
         #arguments=[model_path,test_data],
@@ -66,7 +66,7 @@ def evaluate_fine_tuned_model_op():
     #test_data='preprocessed_data.pkl'
     #model_path='model'
     return dsl.ContainerOp(
-        name="fine tuned model evaluation",
+        name="fine tuned model evaluation2",
         image='maamounm/llm_pipeline:latest',
         command=['python3','/app/evaluate_fine_tuned_model/evaluate_fine_tuned_model.py'],
         #arguments=[model_path,test_data],

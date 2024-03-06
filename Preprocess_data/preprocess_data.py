@@ -1,26 +1,31 @@
-import pickle
-from transformers import GPT2Tokenizer
-from datasets import load_dataset
-import sys
+import json
+import pandas as pd
 
-def preprocess_data(dataset_name='ag_news', task='sst2', split='train[:10%]'):
-    dataset = load_dataset(dataset_name, task, split=split)
+def preprocess_qa_data_to_plain_text_json(json_path='QA.json'):
+    # Load the original JSON dataset
+    with open(json_path, 'r') as f:
+        data = json.load(f)['data']
     
-    tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
-    tokenizer.add_special_tokens({'pad_token': '[PAD]'})
-    
-    def tokenize_function(examples):
-        return tokenizer(examples['text'], padding='max_length', truncation=True, max_length=512)
+    # Initialize list to store processed data
+    processed_data = []
 
-    tokenized_datasets = dataset.map(tokenize_function, batched=True)
+    for item in data:
+        story = item['story']
+        for q, a in zip(item['questions'], item['answers']):
+            processed_data.append({
+                "text": story,
+                "question": q['input_text'],
+                "answer": a['input_text']
+            })
     
-    preprocessed_data_path = 'preprocessed_data.pkl'
-    with open(preprocessed_data_path, 'wb') as f:
-        pickle.dump(tokenized_datasets, f)
+    # Save the processed data as a JSON file
+    preprocessed_data_path = 'preprocessed_data_plain_text.json'
+    with open(preprocessed_data_path, 'w') as f:
+        json.dump(processed_data, f, indent=4)
 
-    print("Data preprocessing completed.")
-    print("Results saved to preprocessed_data.pkl file.")
-    return preprocessed_data_path
+    print("Preprocessing completed. Data saved to", preprocessed_data_path)
 
 if __name__ == "__main__":
-    preprocess_data('ag_news', 'default', 'train[:10%]')
+    preprocess_qa_data_to_plain_text_json('./QA.json')
+
+
