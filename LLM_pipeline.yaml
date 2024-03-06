@@ -1,15 +1,15 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  generateName: bert-fine-tuning-pipeline-
-  annotations: {pipelines.kubeflow.org/kfp_sdk_version: 1.8.22, pipelines.kubeflow.org/pipeline_compilation_time: '2024-03-06T14:49:54.841722',
+  generateName: bert-fine-tuning-pipeline2-
+  annotations: {pipelines.kubeflow.org/kfp_sdk_version: 1.8.22, pipelines.kubeflow.org/pipeline_compilation_time: '2024-03-06T15:36:42.231441',
     pipelines.kubeflow.org/pipeline_spec: '{"description": "A pipeline that fine-tunes
-      bert model with sprecific data.", "name": "bert Fine-Tuning Pipeline"}'}
+      bert model with sprecific data.", "name": "bert Fine-Tuning Pipeline2"}'}
   labels: {pipelines.kubeflow.org/kfp_sdk_version: 1.8.22}
 spec:
-  entrypoint: bert-fine-tuning-pipeline
+  entrypoint: bert-fine-tuning-pipeline2
   templates:
-  - name: bert-fine-tuning-pipeline
+  - name: bert-fine-tuning-pipeline2
     dag:
       tasks:
       - {name: data-preprocessing2, template: data-preprocessing2}

@@ -24,7 +24,7 @@ def build_push_image():
         print(f"Command failed with error: {result.stderr}")
    
 # load balancer service 
-os.system("sudo kubectl exec buildkit-cli -- buildctl --addr tcp://192.168.88.202:1234 build --frontend=dockerfile.v0 --local context=/llm --local dockerfile=/llm --output type=image,name=docker.io/maamounm/llm_pipeline:v2,push=true")
+os.system("sudo kubectl exec buildkit-cli -- buildctl --addr tcp://192.168.88.202:1234 build --frontend=dockerfile.v0 --local context=/llm --local dockerfile=/llm --output type=image,name=docker.io/maamounm/llm_pipeline:latest,push=true")
 
 # cluster IP service 
 # os.system("sudo kubectl exec buildkit-cli -- buildctl --addr tcp://buildkitd:1234 build   --frontend=dockerfile.v0   --local context=/llm   --local dockerfile=/llm   --output type=image,name=docker.io/maamounm/llm_pipeline:latest,push=true")
@@ -73,7 +73,7 @@ def evaluate_fine_tuned_model_op():
     )
 
 @dsl.pipeline(
-    name='bert Fine-Tuning Pipeline',
+    name='bert Fine-Tuning Pipeline2',
     description='A pipeline that fine-tunes bert model with sprecific data.'
 )
 
@@ -109,7 +109,7 @@ kfp_client = Client(host=endpoint, existing_token=token)
 
 
 pipeline_package_path='testing.yaml'
-pipeline_name = "BERT Fine-Tuning Pipeline "+random_suffix()
+pipeline_name = "BERT Fine-Tuning Pipeline 2"+random_suffix()
 pipeline_description = "A pipeline that fine-tunes BERT model with specific data."
 
 experiment_name = "BERT Fine-Tuning Experiments"
